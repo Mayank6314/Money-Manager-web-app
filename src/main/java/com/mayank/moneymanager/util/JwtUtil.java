@@ -1,5 +1,6 @@
 package com.mayank.moneymanager.util;
 
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -56,7 +57,7 @@ public class JwtUtil {
                 .compact();
     }
 
-    public Boolean validateToken(String token) {
+    public Boolean validateToken(String token, UserDetails userDetails) {
         return !isTokenExpired(token);
     }
 }
