@@ -13,7 +13,7 @@ import java.util.List;
 public interface IncomeRepository extends JpaRepository<IncomeEntity, Long> {
 
     // select * from tbl_incomes where profile_id = ?1 order by date desc
-    List<IncomeEntity> findByProfileIdOrderByDatesDesc(Long profileId);
+    List<IncomeEntity> findByProfileIdOrderByDateDesc(Long profileId);
 
     // select * from tbl_incomes where profile_id = ?1 order by date desc limit 5
     List<IncomeEntity> findTop5ByProfileIdOrderByDateDesc(Long profileId);
