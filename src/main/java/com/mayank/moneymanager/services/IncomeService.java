@@ -2,11 +2,13 @@ package com.mayank.moneymanager.services;
 
 import com.mayank.moneymanager.dto.IncomeDTO;
 import com.mayank.moneymanager.dto.IncomeDTO;
+import com.mayank.moneymanager.dto.IncomeDTO;
 import com.mayank.moneymanager.entities.*;
 import com.mayank.moneymanager.entities.IncomeEntity;
 import com.mayank.moneymanager.repository.CategoryRepository;
 import com.mayank.moneymanager.repository.IncomeRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -47,7 +49,7 @@ public class IncomeService {
         IncomeEntity entity = incomeRepository.findById(IncomeID)
                 .orElseThrow(() -> new RuntimeException("Income not found"));
         if(!entity.getProfile().getId().equals(profile.getId())){
-            throw new RuntimeException("Unauthroized to delete this income");
+            throw new RuntimeException("Unauthorized to delete this income");
         }
         incomeRepository.delete(entity);
     }
@@ -64,6 +66,13 @@ public class IncomeService {
         ProfileEntity profile = profileService.getCurrentProfile();
         BigDecimal total = incomeRepository.findTotalIncomeByProfileId(profile.getId());
         return total != null ? total : BigDecimal.ZERO;
+    }
+
+    // filter income
+    public List<IncomeDTO> filterIncomes(LocalDate startDate, LocalDate endDate, String keyword, Sort sort){
+        ProfileEntity profile = profileService.getCurrentProfile();
+        List<IncomeEntity> list = incomeRepository.findByProfileIdAndDateBetweenAndNameContainingIgnoreCase(profile.getId(), startDate, endDate, keyword, sort);
+        return list.stream().map(this::toDTO).toList();
     }
 
     //helper methods
