@@ -5,6 +5,7 @@ COPY pom.xml .
 COPY mvnw .
 COPY .mvn .mvn
 COPY src src
+RUN chmod +x mvnw
 RUN ./mvnw package -DskipTests
 
 # Stage 2 - Run
